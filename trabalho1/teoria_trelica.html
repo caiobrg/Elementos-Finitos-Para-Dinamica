@@ -1,0 +1,983 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Análise Dinâmica e Harmônica de Treliças 1D">
+      
+      
+      
+        <link rel="canonical" href="https://caiobrg.github.io/Elementos-Finitos-Para-Dinamica/trabalho1/trabalho1/teoria_trelica.html">
+      
+      
+        <link rel="prev" href="teoria_harmonica.html">
+      
+      
+        <link rel="next" href="FEM_classes_3D_node.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Elemento de treliça - Análise Dinâmica de Treliças Espaciais via MEF</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@marimo-team/islands@0.23.4/dist/main.js"></script>
+<link
+    href="https://cdn.jsdelivr.net/npm/@marimo-team/islands@0.23.4/dist/style.css"
+    rel="stylesheet"
+    title="marimo-islands"
+    crossorigin="anonymous"
+/>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&amp;family=Lora&amp;family=PT+Sans:wght@400;700&amp;display=swap" rel="stylesheet" />
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css"
+    integrity="sha384-wcIxkf4k558AjM3Yz3BBFQUbk/zgIYC2R0QpeeYb+TwlBVMrlgLqwRjRtGZiK7ww"
+    crossorigin="anonymous"
+/>
+<marimo-filename hidden></marimo-filename>
+</head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fundamentacao-teorica-elemento-de-trelica" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Análise Dinâmica de Treliças Espaciais via MEF" class="md-header__button md-logo" aria-label="Análise Dinâmica de Treliças Espaciais via MEF" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Análise Dinâmica de Treliças Espaciais via MEF
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Elemento de treliça
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Análise Dinâmica de Treliças Espaciais via MEF" class="md-nav__button md-logo" aria-label="Análise Dinâmica de Treliças Espaciais via MEF" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Análise Dinâmica de Treliças Espaciais via MEF
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introdução
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fundamentos Teóricos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fundamentos Teóricos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="teoria_modal.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Análise Modal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="teoria_harmonica.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Análise Harmônica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Elemento de treliça
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="teoria_trelica.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Elemento de treliça
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fundamentacao-teorica-elemento-de-trelica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fundamentação Teórica: Elemento de Treliça
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fundamentação Teórica: Elemento de Treliça">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paralelo-entre-formulacoes-1d-2d-e-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paralelo entre Formulações: 1D, 2D e 3D
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#funcoes-de-forma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Funções de Forma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-matriz-de-rigidez-local-e-a-equivalencia-de-rotacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Matriz de Rigidez Local e a Equivalência de Rotação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A Matriz de Rigidez Local e a Equivalência de Rotação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#restricao-da-formulacao-apenas-elementos-1d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restrição da Formulação: Apenas Elementos 1D
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matriz-de-massa-consistente-mathbfm_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matriz de Massa Consistente (\(\mathbf{M}_e\))
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#montagem-do-sistema-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Montagem do Sistema (Assembly)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FEM_classes_3D
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FEM_classes_3D
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FEM_classes_3D_node.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Node
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FEM_classes_3D_truss_element.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TrussElement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="FEM_classes_3D_fem_system.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FEMSystem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="simulacao_interativa.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simulação interativa da Treliça
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="validacao.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fundamentacao-teorica-elemento-de-trelica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fundamentação Teórica: Elemento de Treliça
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fundamentação Teórica: Elemento de Treliça">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paralelo-entre-formulacoes-1d-2d-e-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paralelo entre Formulações: 1D, 2D e 3D
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#funcoes-de-forma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Funções de Forma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-matriz-de-rigidez-local-e-a-equivalencia-de-rotacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Matriz de Rigidez Local e a Equivalência de Rotação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A Matriz de Rigidez Local e a Equivalência de Rotação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#restricao-da-formulacao-apenas-elementos-1d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restrição da Formulação: Apenas Elementos 1D
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matriz-de-massa-consistente-mathbfm_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matriz de Massa Consistente (\(\mathbf{M}_e\))
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#montagem-do-sistema-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Montagem do Sistema (Assembly)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Elemento de treliça</h1>
+
+<h2 id="fundamentacao-teorica-elemento-de-trelica">Fundamentação Teórica: Elemento de Treliça</h2>
+<p>O elemento de treliça é caracterizado por ser uma barra que suporta apenas forças axiais (tração e compressão), não sofrendo deformações por flexão.</p>
+<h3 id="paralelo-entre-formulacoes-1d-2d-e-3d">Paralelo entre Formulações: 1D, 2D e 3D</h3>
+<p>Em sala de aula, frequentemente inicia-se com a formulação de barra 1D ou treliça 2D. A transição para o espaço tridimensional exige uma generalização dos Graus de Liberdade (GDL) e das transformações de coordenadas.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Característica</th>
+<th style="text-align: left;">1D (Barra Axial)</th>
+<th style="text-align: left;">2D (Treliça no Plano)</th>
+<th style="text-align: left;">3D (Treliça Espacial)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>GDLs por Nó</strong></td>
+<td style="text-align: left;">1 (<span class="arithmatex">\(u\)</span>)</td>
+<td style="text-align: left;">2 (<span class="arithmatex">\(u, v\)</span>)</td>
+<td style="text-align: left;">3 (<span class="arithmatex">\(u, v, w\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Orientação</strong></td>
+<td style="text-align: left;">Alinhada ao eixo <span class="arithmatex">\(x\)</span></td>
+<td style="text-align: left;">Ângulo <span class="arithmatex">\(\beta\)</span></td>
+<td style="text-align: left;">Cossenos Diretores (<span class="arithmatex">\(C_x, C_y, C_z\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Transformação</strong></td>
+<td style="text-align: left;">Identidade</td>
+<td style="text-align: left;">Matriz de Rotação <span class="arithmatex">\(2 \times 2\)</span></td>
+<td style="text-align: left;">Vetor Unitário <span class="arithmatex">\(\mathbf{v}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>No modelo 3D implementado na classe <code>TrussElement</code>, cada nó possui 3 graus de liberdade transicionais, totalizando 6 GDLs por elemento. Enquanto no 2D a orientação é definida por um único ângulo <span class="arithmatex">\(\beta\)</span>, no 3D utilizamos o vetor unitário de direção <span class="arithmatex">\(\mathbf{v}\)</span> obtido pela normalização das coordenadas espaciais:
+$<span class="arithmatex">\(\mathbf{v} = \frac{1}{L} \begin{bmatrix} x_j - x_i \\ y_j - y_i \\ z_j - z_i \end{bmatrix} = \begin{bmatrix} C_x \\ C_y \\ C_z \end{bmatrix}\)</span>$</p>
+<hr />
+<h3 id="funcoes-de-forma">Funções de Forma</h3>
+<p>As funções de forma (<span class="arithmatex">\(N\)</span>) são fundamentais para interpolar os deslocamentos dentro do elemento a partir dos valores nos nós. Para o elemento de treliça, utilizamos funções lineares em coordenadas naturais normalizadas (<span class="arithmatex">\(\xi \in [-1, 1]\)</span>):</p>
+<ul>
+<li><strong>Nó 1 (<span class="arithmatex">\(\xi = -1\)</span>):</strong> <span class="arithmatex">\(N_1(\xi) = \frac{1}{2}(1 - \xi)\)</span> </li>
+<li><strong>Nó 2 (<span class="arithmatex">\(\xi = 1\)</span>):</strong> <span class="arithmatex">\(N_2(\xi) = \frac{1}{2}(1 + \xi)\)</span> </li>
+</ul>
+<p>Essas funções garantem a continuidade do campo de deslocamentos e satisfazem a propriedade da partição da unidade (<span class="arithmatex">\(\sum N_i = 1\)</span>).</p>
+<hr />
+<h3 id="a-matriz-de-rigidez-local-e-a-equivalencia-de-rotacao">A Matriz de Rigidez Local e a Equivalência de Rotação</h3>
+<p>A matriz de rigidez elementar no sistema de coordenadas local (1D) é derivada da energia potencial de deformação e resulta em:</p>
+<p>$$[K_{local}] = \frac{EA}{L} \begin{bmatrix} 1 &amp; -1 \ -1 &amp; 1 \end{bmatrix} $$</p>
+<p>Da Rotação Matricial aos Cossenos DiretoresEm implementações bidimensionais tradicionais, a transição para o sistema global é feita através de uma matriz de rotação <span class="arithmatex">\([\tau]\)</span> baseada em um ângulo <span class="arithmatex">\(\beta\)</span>:</p>
+<p>$<span class="arithmatex">\([\bar{K}_e] = [\tau]^T [K_{local}] [\tau]\)</span>$</p>
+<p>No espaço 3D, em vez de ângulos, utilizamos o vetor unitário de direção <span class="arithmatex">\(\mathbf{v}\)</span> (cossenos diretores), definido pelas coordenadas dos nós <span class="arithmatex">\(i\)</span> e <span class="arithmatex">\(j\)</span> e pelo comprimento <span class="arithmatex">\(L\)</span>:</p>
+<div class="arithmatex">\[\mathbf{v} = \begin{bmatrix} C_x \\ C_y \\ C_z \end{bmatrix} = \frac{1}{L} \begin{bmatrix} x_j - x_i \\ y_j - y_i \\ z_j - z_i \end{bmatrix}\]</div>
+<p>A Equivalência Matemática:</p>
+<p>A operação de rotação matricial para um elemento de treliça é matematicamente equivalente ao produto externo do vetor de cossenos diretores. Isso ocorre porque a rigidez da treliça existe apenas na direção axial. Ao calcular a matriz <span class="arithmatex">\(\Lambda = \mathbf{v} \mathbf{v}^T\)</span>, estamos projetando a rigidez escalar <span class="arithmatex">\(\frac{EA}{L}\)</span> simultaneamente nas direções <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(y\)</span> e <span class="arithmatex">\(z\)</span>:</p>
+<div class="arithmatex">\[\Lambda = \begin{bmatrix} C_x^2 &amp; C_x C_y &amp; C_x C_z \\ C_y C_x &amp; C_y^2 &amp; C_y C_z \\ C_z C_x &amp; C_z C_y &amp; C_z^2 \end{bmatrix}\]</div>
+<p>Desta forma, a matriz de rigidez global do elemento (<span class="arithmatex">\(6 \times 6\)</span>) é montada diretamente como:</p>
+<div class="arithmatex">\[\mathbf{K}_e = \frac{EA}{L} \begin{bmatrix} \Lambda &amp; -\Lambda \\ -\Lambda &amp; \Lambda \end{bmatrix}\]</div>
+<h4 id="restricao-da-formulacao-apenas-elementos-1d">Restrição da Formulação: Apenas Elementos 1D</h4>
+<p>É fundamental destacar que esta simplificação — utilizar apenas o vetor de cossenos diretores e o produto externo para a montagem global — só é válida para elementos unidimensionais (barras e treliças).  </p>
+<p>Isso ocorre porque, nestes elementos, as propriedades físicas (rigidez e massa) estão concentradas exclusivamente ao longo de um único eixo de referência. Em elementos de viga (beam), por exemplo, existem propriedades de inércia à flexão e torção que dependem da orientação da seção transversal em relação a outros eixos, exigindo uma matriz de rotação completa para descrever o comportamento espacial.</p>
+<hr />
+<h3 id="matriz-de-massa-consistente-mathbfm_e">Matriz de Massa Consistente (<span class="arithmatex">\(\mathbf{M}_e\)</span>)</h3>
+<p>Diferente da matriz de massa concentrada (<em>lumped</em>), a <strong>matriz de massa consistente</strong> considera a distribuição contínua da massa ao longo do elemento através da integração do campo de deslocamentos:</p>
+<div class="arithmatex">\[[M_e] = \int_{elem} \rho A [N]^T [N] dx\]</div>
+<p>Resolvendo a integral em coordenadas naturais, obtemos a expressão para o elemento 1D:
+$<span class="arithmatex">\([M_{e, 1D}] = \frac{\rho AL}{6} \begin{bmatrix} 2 &amp; 1 \\ 1 &amp; 2 \end{bmatrix}\)</span>$</p>
+<p>Na implementação 3D, para manter a consistência com os 3 GDLs por nó, cada termo da matriz acima é multiplicado por uma matriz identidade <span class="arithmatex">\(\mathbf{I}_3\)</span>, distribuindo a inércia igualmente nas três direções espaciais:
+$<span class="arithmatex">\(\mathbf{M}_e = \frac{\rho AL}{6} \begin{bmatrix} 2\mathbf{I}_3 &amp; \mathbf{I}_3 \\ \mathbf{I}_3 &amp; 2\mathbf{I}_3 \end{bmatrix}\)</span>$</p>
+<hr />
+<h3 id="montagem-do-sistema-assembly">Montagem do Sistema (Assembly)</h3>
+<p>O processo de montagem consiste em somar as contribuições de cada elemento nas posições corretas das matrizes globais da estrutura. No código, isso é realizado mapeando os GDLs locais do elemento (<code>self.dofs</code>) para os índices globais através de uma matriz de conectividade implícita.</p>
+<div class="arithmatex">\[[M_{global}] = \sum [M_e] \quad \text{e} \quad [K_{global}] = \sum [K_e]\]</div>
+<p>Após a montagem, aplicam-se as condições de contorno (como engastes onde <span class="arithmatex">\(u=0\)</span>) removendo as linhas e colunas correspondentes dos GDLs restringidos para possibilitar a solução do sistema.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
