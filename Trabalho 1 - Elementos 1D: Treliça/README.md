@@ -6,7 +6,7 @@ Este projeto apresenta o desenvolvimento de um solver customizado em Python para
 
 A documentação completa e o Notebook Virtual interativo estão disponíveis online através do GitHub Pages. Esta é a forma mais simples de interagir com a simulação sem a necessidade de configurar um ambiente local:
 
->**[Acesse a Documentação Interativa aqui](https://caiobraga.github.io/seu-repositorio/trabalho1)**
+>**[Acesse a Documentação Interativa aqui](https://caiobrg.github.io/Elementos-Finitos-Para-Dinamica/trabalho1/simulacao_interativa.html)**
 
 ---
 
