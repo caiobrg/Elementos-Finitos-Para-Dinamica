@@ -12,13 +12,13 @@ A documentação completa e o Notebook Virtual interativo estão disponíveis on
 
 ## 📂 Estrutura do Projeto
 
-* **`site/`**: Documentação técnica gerada via MkDocs.
 * **`notebook.ipynb`**: Versão Jupyter Notebook tradicional com a sequência de cálculos e validações.
 * **`notebook_main.py`**: Código-fonte do notebook interativo desenvolvido em **Marimo** (WASM).
 * **`FEM_classes_3D.py`**: Implementação das classes de núcleo: `Node`, `TrussElement` e `FEMSystem`.
 * **`truss_config.py`**: Parâmetros de geometria e propriedades de material da treliça.
 * **`plot_functions.py`**: Scripts auxiliares para visualização de modos e resposta em frequência (FRF).
-* **`script_validação.apdl`**: Script para validação cruzada no **Ansys Mechanical APDL**.
+* **`script_validação.apdl`**: Script para validação cruzada no Ansys Mechanical APDL.
+* **`dados_ansys.csv`**: Dados coletados à partir da análise no Ansys Mechanical APDL.
 * **`requirements.txt`**: Dependências necessárias para reproduzir o ambiente local.
 
 ## 🛠️ Execução Local
