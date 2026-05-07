@@ -1,0 +1,110 @@
+FINISH
+/CLEAR, NOSTART
+
+! ==========================================
+! 1. PRÉ-PROCESSAMENTO (Geometria e Material)
+! ==========================================
+/PREP7
+
+! Define o Tipo de Elemento (Treliça 3D que suporta apenas força axial)
+ET, 1, LINK180       
+
+! Define a Seção Transversal (Área = 0.005 m^2 conforme seu Python)
+SECTYPE, 1, LINK     
+SECDATA, 0.005      
+
+! Define as Propriedades do Material (Aço)
+MP, EX, 1, 210E9      ! Módulo de Young (Pa)
+MP, PRXY, 1, 0.3      ! Coeficiente de Poisson
+MP, DENS, 1, 7850     ! Densidade (kg/m^3)
+
+! Criação dos Nós (N, ID, X, Y, Z)
+N, 1, 0.0, 0.0, 0.0
+N, 2, 2.0, 0.0, 0.0
+N, 3, 4.0, 0.0, 0.0
+N, 4, 6.0, 0.0, 0.0
+N, 5, 8.0, 0.0, 0.0
+N, 6, 10.0, 0.0, 0.0
+N, 7, 1.0, 2.0, 0.0
+N, 8, 3.0, 2.0, 0.0
+N, 9, 5.0, 2.0, 0.0
+N, 10, 7.0, 2.0, 0.0
+N, 11, 9.0, 2.0, 0.0
+
+! Criação dos Elementos (E, Nó_i, Nó_j)
+E, 1, 2
+E, 2, 3
+E, 3, 4
+E, 4, 5
+E, 5, 6
+E, 7, 8
+E, 8, 9
+E, 9, 10
+E, 10, 11
+E, 1, 7
+E, 7, 2
+E, 2, 8
+E, 8, 3
+E, 3, 9
+E, 9, 4
+E, 4, 10
+E, 10, 5
+E, 5, 11
+E, 11, 6
+
+! ==========================================
+! 2. CONDIÇÕES DE CONTORNO
+! ==========================================
+! A Trava Mágica: Força o problema 3D a se comportar como 2D
+D, ALL, UZ, 0.0    
+
+! Apoios
+D, 1, UX, 0.0      ! Apoio Fixo no Nó 1 (antigo Nó 0)
+D, 1, UY, 0.0      
+D, 6, UY, 0.0      ! Apoio Móvel no Nó 6 (antigo Nó 5, em x=10m)
+
+FINISH
+
+! ==========================================
+! 3. SOLVER (Análise Modal)
+! ==========================================
+/SOLU
+ANTYPE, MODAL      ! Define o tipo de análise como Modal
+MODOPT, LANB, 5    ! Pede 5 modos usando o método rigoroso Block Lanczos
+SOLVE
+
+ANTYPE,3                        ! 3 = Análise Harmônica
+HROUT,0,1                       ! Output: Amplitude e Fase
+KBC,1                           ! Carga em Degrau (Stepped) - CRÍTICO para FRF
+
+! Faixa de Frequência
+HARFRQ,0,200                    ! Frequência Inicial e Final [Hz]
+NSUBST,200                      ! Número de divisões na faixa (ex: 1 ponto/Hz)
+
+! Amortecimento de Rayleigh (Parâmetros calculados no seu Python)
+ALPHAD,0.456                    ! Substituir pelo seu alpha_calc
+BETAD,0.000123                  ! Substituir pelo seu beta_calc
+
+! --- 5. CARGA (FORÇAMENTO HARMÔNICO) ---
+F,4,FY,1000                     ! Aplicar 1000N no Nó 4 (ID 3 no Python) em Y
+
+SOLVE
+
+FINISH
+
+! ==========================================
+! 4. PÓS-PROCESSAMENTO (Exibir Frequências)
+! ==========================================
+/POST1
+SET, LIST          ! Imprime a tabela de frequências na tela
+
+/POST26
+NSOL,2,4,U,Y, AMPLI_Y           ! Armazena deslocamento Y do Nó 4 na variável 2
+
+! Configurar para plotar em Escala Logarítmica (Opcional)
+/YLAB, Amplitude [m]
+/XLAB, Frequência [Hz]
+PLVAR,2                         ! Plota a Magnitude da FRF
+
+! Para exportar os dados para um arquivo de texto e ler no seu Python:
+! PRVAR,2
