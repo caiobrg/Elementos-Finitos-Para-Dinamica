@@ -11,6 +11,8 @@ Abaixo estão os links para a documentação técnica e laboratórios virtuais d
 | Trabalho | Descrição | Status | Link de Acesso |
 | :--- | :--- | :--- | :--- |
 | **T01** | **Dinâmica de Treliças Espaciais:** Solver 3D, Análise Modal e Harmônica (FRF) com validação em Ansys. | ✅ Finalizado | [Visualizar Site](https://caiobrg.github.io/Elementos-Finitos-Para-Dinamica/trabalho1/index.html) |
+| **T02** | **Dinâmica de estrutura simplificada:** Análise de uma ponte estaiada simplificada exposta à excitação do vento. | ✅ Finalizado | [Visualizar Diretório](https://caiobrg.github.io/Elementos-Finitos-Para-Dinamica/trabalho1/index.html) |
+
 
 ---
 
